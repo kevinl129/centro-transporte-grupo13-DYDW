@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Terminal Central - Consulta de Viajes</title>
+    <link rel="stylesheet" href="style-centro.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Terminal Central BA</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="viajes.html">Consulta de Viajes</a></li>
+                <li><a href="servicios.html">Servicios y Mapa</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tarjeta">
+            <h1>Planificador de Viajes</h1>
+            <p>Seleccioná tu punto de partida y tu destino para obtener la mejor ruta.</p>
+            
+            <form id="form-viajes" onsubmit="buscarViaje(event)">
+                <label for="origen">Origen:</label>
+                <select id="origen" required>
+                    <option value="" disabled selected>Seleccioná el origen</option>
+                    <option value="terminal">Terminal Central</option>
+                    <option value="hospitales">Hospitales (Sur)</option>
+                </select>
+
+                <label for="destino">Destino:</label>
+                <select id="destino" required>
+                    <option value="" disabled selected>Seleccioná el destino</option>
+                    <option value="facultad">Facultad de Derecho (Norte)</option>
+                    <option value="terminal">Terminal Central</option>
+                </select>
+
+                <button type="submit">Buscar Viaje</button>
+            </form>
+        </div>
+
+        <div id="resultado-busqueda" class="tarjeta" style="display: none;"></div>
+    </main>
+
+    <script>
+        // Datos simulados obligatorios
+        const rutas = [
+            {
+                origen: "terminal",
+                destino: "facultad",
+                transporte: "Subte Línea H",
+                anden: "Plataforma 2 (Subsuelo)",
+                tiempo: "15 minutos",
+                costo: "$650"
+            },
+            {
+                origen: "hospitales",
+                destino: "terminal",
+                transporte: "Subte Línea H",
+                anden: "Plataforma 1 (Subsuelo)",
+                tiempo: "10 minutos",
+                costo: "$650"
+            },
+            {
+                origen: "terminal",
+                destino: "terminal",
+                transporte: "Ninguno",
+                anden: "-",
+                tiempo: "Ya estás en este lugar",
+                costo: "$0"
+            }
+        ];
+
+        function buscarViaje(event) {
+            event.preventDefault();
+            
+            const origen = document.getElementById("origen").value;
+            const destino = document.getElementById("destino").value;
+            const resultadoDiv = document.getElementById("resultado-busqueda");
+            
+            resultadoDiv.style.display = "block"; // Mostrar la tarjeta de resultado
+            
+            const viaje = rutas.find(r => r.origen === origen && r.destino === destino);
+            
+            if (viaje) {
+                // Inyectamos los datos dinámicos requeridos por la consigna
+                resultadoDiv.innerHTML = `
+                    <h2 style="color: var(--primary-color);">Ruta Recomendada</h2>
+                    <p><strong>Transporte recomendado:</strong> ${viaje.transporte}</p>
+                    <p><strong>Plataforma/Andén:</strong> ${viaje.anden}</p>
+                    <p><strong>Tiempo estimado:</strong> ${viaje.tiempo}</p>
+                    <p><strong>Costo estimado:</strong> ${viaje.costo}</p>
+                `;
+            } else {
+                resultadoDiv.innerHTML = `
+                    <h2 style="color: red;">Sin resultados</h2>
+                    <p>No se encontraron rutas directas para esta combinación con los datos simulados actuales.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
